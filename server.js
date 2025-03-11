@@ -1,7 +1,5 @@
-import express from "express";
-import { StatusCodes } from "http-status-codes";
+import { app } from "./src/services/expressService.js";
 import client from "./src/services/redisClient.js";
-const app = express();
 
 const startProxyServer = async (port) => {
 	try {
@@ -11,18 +9,11 @@ const startProxyServer = async (port) => {
 		await client.connect();
 		console.log("Cache database set up successfully");
 	} catch (err) {
-		console.log(err);
+		console.error(
+			"An error occurred while setting up the Caching Proxy Server",
+			err,
+		);
 	}
 };
 
-app.get("*", (req, res) =>{
-	const {path, url} = req;
-	//Note:
-	//to visit localhost:3000/sdgsg/45?dfgfdg=rete:
-	//"url": "/sdgsg/45?dfgfdg=rete",
-    // "path": "/sdgsg/45",
-    // "query": {"dfgfdg": "rete"}
-})
-
-export { app, startProxyServer };
-
+export default startProxyServer;

@@ -1,17 +1,21 @@
-import axios from "axios";
+import chalk from "chalk";
 import client from "../services/redisClient.js";
 
-const checkCache = async(key) =>{
-	try{
-		if(client.get(key)){
-			console.log("Found in cache. Getting from cache instead.");
-			const rawValue = await client.get(key);
-			const treatedValue = JSON.parse(rawValue);
+const checkCache = async (key) => {
+	//In this case, the key is the url
+	try {
+		const fetchedKey = await client.get(key);
+		if (fetchedKey) {
+			console.log(
+				chalk.blueBright("Found in cache. Getting from cache instead."),
+			);
+			const treatedValue = JSON.parse(fetchedKey);
 			return treatedValue;
 		}
-		console.log("Not found in cache. Getting from website instead");
-		axios.get()
-	}catch(err){
-		console.log("Error occured at checkCache", err);
+		return false;
+	} catch (err) {
+		console.error("Error occured while checking for cache", err);
 	}
-}
+};
+
+export default checkCache;
