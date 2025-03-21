@@ -21,7 +21,15 @@ if (!process.env.REDIS_HOST && !process.env.REDIS_PASSWORD) {
 }
 
 client.on("error", (err) => {
-	console.error(`Redis client error: ${err}`);
+	console.log(err)
+	switch (err.code) {
+		case "ECONNREFUSED":
+			throw new Error("Connection to local redis instance refused.");
+		case "ENOTFOUND":
+			throw new Error(`Can't find Redis server address: ${err.hostname}`);
+	}
+
+	throw new Error(`Redis client error: ${err}`);
 });
 
 export default client;

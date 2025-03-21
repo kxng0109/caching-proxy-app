@@ -1,9 +1,11 @@
 import axios from "axios";
+import chalk from "chalk";
 import client from "./redisClient.js";
 
 const axiosService = async (origin, url) => {
 	let forwardServer;
 	switch (true) {
+		//If the origin ends with a "/" and the url given to us starts with a "/"
 		case url.charAt(0) === "/" && origin.charAt(origin.length - 1) === "/":
 			forwardServer = `${origin.slice(0, -1)}${url}`;
 			break;
@@ -23,10 +25,12 @@ const axiosService = async (origin, url) => {
 		return data;
 	} catch (err) {
 		if (err.status && err.status == 404) {
-			console.error("URL not found. Try again");
+			console.error(chalk.redBright("URL not found. Try again"));
 			process.exit(1);
-		};
-		console.error("Error occurred while fetching website", err);
+		}
+		console.error(
+			chalk.redBright`Error occurred while fetching website ${err}`,
+		);
 	}
 };
 

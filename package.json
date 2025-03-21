@@ -3,6 +3,9 @@
 	"version": "1.0.0",
 	"description": "A caching server that caches responses from other servers.",
 	"main": "app.js",
+	"bin": {
+		"caching-proxy" : "./app.js"
+	},
 	"type": "module",
 	"scripts": {
 		"start": "node .",
